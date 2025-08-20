@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Chatbot</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="chat-box">
+        <div class="chat-box-header">
+            <h3>Medical Chatbot</h3>
+            <p><i class="fa fa-times"></i></p>
+        </div>
+
+        <div class="chat-box-body" id="chat-body">
+            <!-- Messages will appear here -->
+        </div>
+
+        <div class="chat-box-footer">
+            <button id="addExtra"><i class="fa fa-plus"></i></button>
+            <input id="message" placeholder="Enter Your Message" type="text" />
+            <i id="send" class="send far fa-paper-plane"></i>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // send message on click
+            $("#send").on("click", function () {
+                sendMessage();
+            });
+
+            // also send message when pressing Enter
+            $("#message").on("keypress", function (e) {
+                if (e.which === 13) {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                let msg = $("#message").val().trim();
+                if (msg === "") return;
+
+                // append user message
+                $("#chat-body").append(`
+                    <div class="chat-box-body-send">
+                        <p>${msg}</p>
+                        <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                `);
+                $("#message").val(""); // clear input
+
+                // send to Flask backend
+                $.post("/get", { msg: msg }, function (data) {
+                    $("#chat-body").append(`
+                        <div class="chat-box-body-receive">
+                            <p>${data}</p>
+                            <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        </div>
+                    `);
+                    // auto scroll to bottom
+                    $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+                }).fail(function () {
+                    $("#chat-body").append(`
+                        <div class="chat-box-body-receive">
+                            <p><b>Error:</b> Server not responding</p>
+                        </div>
+                    `);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
