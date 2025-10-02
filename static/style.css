@@ -83,6 +83,8 @@ body {
     padding: 15px;
     overflow-y: auto;
     background: #faf6ff;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Sent Messages */
@@ -111,8 +113,13 @@ body {
     padding: 10px 15px;
     border-radius: 15px 15px 15px 0;
     margin: 5px 0;
-    max-width: 70%;
+    max-width: 80%;
+    width: auto;
+    white-space: pre-wrap;
     align-self: flex-start;
+    word-wrap: break-word;   /* old browsers */
+    overflow-wrap: break-word;
+    box-sizing: border-box ;
 }
 .chat-box-body-receive span {
     font-size: 10px;
