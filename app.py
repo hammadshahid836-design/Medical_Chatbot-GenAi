@@ -70,5 +70,6 @@ def chat():
     print("Response :", response["answer"])
     return str(response["answer"])
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port = 8080 , debug = True)   
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))  # use Render's PORT if available
+    app.run(host="0.0.0.0", port=port)
