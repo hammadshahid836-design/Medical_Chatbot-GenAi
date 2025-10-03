@@ -71,5 +71,5 @@ def chat():
     return str(response["answer"])
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))  # use Render's PORT if available
+    port = int(os.environ.get("PORT", 10000))  # use Render's PORT if available
     app.run(host="0.0.0.0", port=port)
