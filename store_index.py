@@ -4,7 +4,7 @@ from pinecone import ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 from dotenv import load_dotenv
 # Downloading Embedding model from hugging face
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 import os
 
 
@@ -15,7 +15,7 @@ PINECONE_API_KEY= os.getenv('PINECONE_API_KEY')
 os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
 
 
-extracted_data = load_pdf_file(data = 'C:\\Users\\HP User\\Desktop\Medical_chatbot\\Medical_Chatbot-GenAi\\Data')
+extracted_data = load_pdf_file(data = 'E:\Files\PROJECTS\Medical_chatbot\Medical_Chatbot-GenAi\Data')
 text_chunks = text_split(extracted_data)
 embeddings = HuggingFaceEmbeddings(model_name= "sentence-transformers/all-MiniLM-L6-v2")
 
@@ -23,7 +23,7 @@ embeddings = HuggingFaceEmbeddings(model_name= "sentence-transformers/all-MiniLM
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
 
-index_name = "medibot"
+index_name = "testbot"
 
 pc.create_index(
     name = index_name,

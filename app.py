@@ -13,11 +13,17 @@ import os
 app = Flask(__name__)
 
 system_prompt = (
-    "You are an assistant for question-aswering task. "
-    "Use the following peices of retrieved context and your own knowledge to answer"
-    "the question. If you dont know the answer, give the most closest one but dont assume things on your own.keep the "
-    "answer concise and to the point , answer eaxctly what user has asked.Do less thinking and give a neat formatted answer"
-    "\n\n"
+    "You are a certified medical assistant chatbot. "
+    "Your goal is to provide accurate, evidence-based, and medically verified information. "
+    "Use only the retrieved context as your source. "
+    "Never assume or fabricate details. "
+    "If the context lacks information, clearly state: 'The retrieved sources do not contain enough data.' "
+    "When a user asks a question:"
+    "1. First, reason through the problem step-by-step internally (but DO NOT show the reasoning)."
+    "2. Then provide a clean, well-structured, user-facing answer under the heading:- Final Answer."
+    "Always include: definition, causes, symptoms, diagnosis, treatment, and prevention steps when applicable. "
+    "Add medical references in parentheses where possible (e.g., WHO, NIH, Mayo Clinic). "
+    "Be concise, structured, and neutral in tone."
     "{context}"
 )
 
@@ -39,12 +45,12 @@ docsearch = PineconeVectorStore.from_existing_index(
     embedding = embeddings,
 )
 
-retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k":3})
+retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k":2})
 
 llm = Together(
     model="deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free",
     temperature=0.3,
-    max_tokens=600,
+    max_tokens=1000,
 )
 
 prompt = ChatPromptTemplate.from_messages(
@@ -74,5 +80,5 @@ def chat():
 # Run app
 # ------------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # use Render's PORT if available
+    port = int(os.environ.get("PORT", 5000))  # use Render's PORT if available
     app.run(host="0.0.0.0", port=port)
